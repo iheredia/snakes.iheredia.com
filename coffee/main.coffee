@@ -15,7 +15,6 @@ $ ->
     drawingCanvas.clear()
 
     mainSnake.move()
-    mainSnake.render()
 
     food.render()
 
@@ -27,8 +26,10 @@ $ ->
       snake.move()
       snake.render()
 
-      if areAtSamePlace(mainSnake, snake)
+      if collision(mainSnake, snake)
         # TODO colission
         console.log 'dead'
+
+    mainSnake.render()
 
   atFrameRate(20).do(mainLoop)

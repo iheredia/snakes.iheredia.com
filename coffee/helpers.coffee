@@ -15,11 +15,16 @@ _currentColor = -1
 
 nextColor = ->
   colors = [
-    '#ff0000',
-    '#00ff00',
-    '#0000ff'
+    '#bc2424',
+    '#2abc24',
+    '#2461bc',
+    '#6c24bc',
+    '#b6bc24',
+    '#24bca3',
+    '#0e2ba6',
+    '#a60e93'
   ]
-  _currentColor += 1
+  _currentColor = (_currentColor + 1) % colors.length
   colors[_currentColor]
 
 randomPosition = ->
@@ -31,6 +36,9 @@ randomPosition = ->
 areAtSamePlace = (oneThing, otherThing) ->
   oneThing.position.x == otherThing.position.x && oneThing.position.y == otherThing.position.y
 
+collision = (oneSnake, anotherSnake) ->
+  false
+
 drawingCanvas = {
   $el: null
   el: null
@@ -41,6 +49,14 @@ drawingCanvas = {
     @el = @$el[0]
     @el.width = @$el.width()
     @el.height = @$el.height()
+    minGridSize = 50
+    if @el.height < @el.width
+      gridHeight = minGridSize
+      gridWidth = Math.round(minGridSize*@el.width/@el.height)
+    else
+      gridHeight = Math.round(minGridSize*@el.height/@el.width)
+      gridWidth = minGridSize
+
     @ctx = @el.getContext('2d')
 
   clear: ->
