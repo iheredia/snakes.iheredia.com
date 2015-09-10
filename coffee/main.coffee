@@ -8,28 +8,33 @@ $ ->
   mainSnake = new MainSnake
   mirrorSnakes = []
   food = new Food
+  score = 0
 
   bindEvents(mainSnake)
 
   mainLoop = ->
-    drawingCanvas.clear()
+    if playing()
 
-    mainSnake.move()
+      drawingCanvas.clear()
+
+      mainSnake.move()
+
+      if areAtSamePlace(mainSnake, food)
+        mirrorSnakes.push new MirrorSnake(of: mainSnake, color: food.color)
+        food.regenerate()
+        score += 1
+        $('#score-number').text(score)
+
+      for snake in mirrorSnakes
+        snake.move()
+        snake.render()
+
+        if collision(mainSnake, snake)
+          # TODO
+          setPlaying(false)
+          showGameOver()
 
     food.render()
-
-    if areAtSamePlace(mainSnake, food)
-      mirrorSnakes.push new MirrorSnake(of: mainSnake, color: food.color)
-      food.regenerate()
-
-    for snake in mirrorSnakes
-      snake.move()
-      snake.render()
-
-      if collision(mainSnake, snake)
-        # TODO colission
-        console.log 'dead'
-
     mainSnake.render()
 
   atFrameRate(20).do(mainLoop)

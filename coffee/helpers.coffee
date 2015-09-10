@@ -2,6 +2,10 @@
 # ignacio.nh@gmail.com
 # Buenos Aires, Argentina
 
+_playing = false
+playing = -> _playing
+setPlaying = (boolean) -> _playing = boolean
+
 gridWidth = 100
 gridHeight = 50
 
@@ -75,12 +79,23 @@ drawingCanvas = {
 
 bindEvents = (snake) ->
   changeDirection = (e) ->
-    if e.keyCode == 37 and snake.direction != 'right'
-      snake.direction = 'left'
-    else if e.keyCode == 38 and snake.direction != 'down'
-      snake.direction = 'up'
-    else if e.keyCode == 39 and snake.direction != 'left'
-      snake.direction = 'right'
-    else if e.keyCode == 40 and snake.direction != 'up'
-      snake.direction = 'down'
+    if playing()
+      if e.keyCode == 37 and snake.direction != 'right'
+        snake.direction = 'left'
+      else if e.keyCode == 38 and snake.direction != 'down'
+        snake.direction = 'up'
+      else if e.keyCode == 39 and snake.direction != 'left'
+        snake.direction = 'right'
+      else if e.keyCode == 40 and snake.direction != 'up'
+        snake.direction = 'down'
+    else if e.keyCode == 37 or e.keyCode == 38 or e.keyCode == 39 or e.keyCode == 40
+      hideGameOver()
+      setPlaying(true)
+
   $(window).on('keydown', changeDirection)
+
+showGameOver = ->
+  $('#game-over').show()
+
+hideGameOver = ->
+  $('#game-over').hide()

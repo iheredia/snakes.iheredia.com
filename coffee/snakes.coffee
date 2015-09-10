@@ -7,7 +7,7 @@ class MainSnake
 
   constructor: ->
     @position = { x: Math.round(gridWidth/2), y: Math.round(gridHeight/2) }
-    @history = []
+    @history = [ { x: @position.x, y: @position.y } ]
     @color = '#ededed'
     @direction = 'right'
 
@@ -32,12 +32,11 @@ class MainSnake
     @history.push { x: @position.x, y: @position.y }
 
   render: ->
-    if @history.length < 6
-      for position in @history
-        drawingCanvas.drawSquare(position.x, position.y, @color)
-    else
-      for i in [1...6]
+    for i in [1..6]
+      if @history.length-i > -1
         drawingCanvas.drawSquare(@history[@history.length-i].x, @history[@history.length-i].y, @color)
+      else
+        drawingCanvas.drawSquare(@history[0].x + @history.length-i, @history[0].y, @color)
 
 class MirrorSnake
   constructor: (@params)->
@@ -49,6 +48,6 @@ class MirrorSnake
     @offset += 1
 
   render: ->
-    for i in [0..6]
+    for i in [0...6]
       position = @originalSnake.history[@offset+i]
       drawingCanvas.drawSquare(position.x, position.y, @color)

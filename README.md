@@ -5,9 +5,8 @@ coffee -cwj ./js/main.js ./coffee/main.coffee  ./coffee/helpers.coffee  ./coffee
 
 ### To do
 
-* Collision death
+* Collision death, game-over and restart
 * Better food generation algorithm (nothing near center or main snake head)
-* Welcome message
-* Score
 * Shares
 * Touch events
+* Avoid hacky turn back (pressing two arrows almost instantaneously)
