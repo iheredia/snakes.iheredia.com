@@ -40,8 +40,15 @@ randomPosition = ->
 areAtSamePlace = (oneThing, otherThing) ->
   oneThing.position.x == otherThing.position.x && oneThing.position.y == otherThing.position.y
 
-collision = (oneSnake, anotherSnake) ->
+intersect = (oneList, anotherList) ->
+  for element in oneList
+    for anotherElement in anotherList
+      if element.x == anotherElement.x and element.y == anotherElement.y
+        return true
   false
+
+collision = (oneSnake, anotherSnake) ->
+  intersect(oneSnake.occupiedSpace(), anotherSnake.occupiedSpace())
 
 drawingCanvas = {
   $el: null
@@ -80,14 +87,7 @@ drawingCanvas = {
 bindEvents = (snake) ->
   changeDirection = (e) ->
     if playing()
-      if e.keyCode == 37 and snake.direction != 'right'
-        snake.direction = 'left'
-      else if e.keyCode == 38 and snake.direction != 'down'
-        snake.direction = 'up'
-      else if e.keyCode == 39 and snake.direction != 'left'
-        snake.direction = 'right'
-      else if e.keyCode == 40 and snake.direction != 'up'
-        snake.direction = 'down'
+      snake.keyPressed(e.keyCode)
     else if e.keyCode == 37 or e.keyCode == 38 or e.keyCode == 39 or e.keyCode == 40
       hideGameOver()
       setPlaying(true)

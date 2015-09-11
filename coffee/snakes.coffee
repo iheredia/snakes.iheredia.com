@@ -38,7 +38,22 @@ class MainSnake
       else
         drawingCanvas.drawSquare(@history[0].x + @history.length-i, @history[0].y, @color)
 
+  occupiedSpace: ->
+    @history.slice(@history.length-6, @history.length)
+
+  keyPressed: (keyCode) ->
+    if keyCode == 37 and @direction != 'right'
+      @direction = 'left'
+    else if keyCode == 38 and @direction != 'down'
+      @direction = 'up'
+    else if keyCode == 39 and @direction != 'left'
+      @direction = 'right'
+    else if keyCode == 40 and @direction != 'up'
+      @direction = 'down'
+
 class MirrorSnake
+  length: 6
+
   constructor: (@params)->
     @color = @params.color
     @originalSnake = @params.of
@@ -48,6 +63,9 @@ class MirrorSnake
     @offset += 1
 
   render: ->
-    for i in [0...6]
+    for i in [0...@length]
       position = @originalSnake.history[@offset+i]
       drawingCanvas.drawSquare(position.x, position.y, @color)
+
+  occupiedSpace: ->
+    @originalSnake.history.slice(@offset, @offset+@length)
