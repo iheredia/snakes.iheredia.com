@@ -31,10 +31,18 @@ nextColor = ->
   _currentColor = (_currentColor + 1) % colors.length
   colors[_currentColor]
 
+equiprobable = (min, max) ->
+  Math.floor(Math.random() * (1+max-min)) + min
+
+distance = (onePosition, anotherPosition) ->
+  xDiff = onePosition.x - anotherPosition.x
+  yDiff = onePosition.y - anotherPosition.y
+  Math.sqrt(xDiff*xDiff + yDiff*yDiff)
+
 randomPosition = ->
   {
-    x: Math.round(Math.random()*gridWidth),
-    y: Math.round(Math.random()*gridHeight)
+    x: equiprobable(0, gridWidth),
+    y: equiprobable(0, gridHeight)
   }
 
 areAtSamePlace = (oneThing, otherThing) ->

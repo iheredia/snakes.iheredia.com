@@ -21,7 +21,7 @@ $ ->
 
       if areAtSamePlace(mainSnake, food)
         mirrorSnakes.push new MirrorSnake(of: mainSnake, color: food.color)
-        food.regenerate()
+        food.regenerateDependingOn(mainSnake.position)
         score += 1
         $('#score-number').text(score)
 

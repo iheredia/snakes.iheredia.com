@@ -6,7 +6,6 @@ coffee -cwj ./js/main.js ./coffee/main.coffee  ./coffee/helpers.coffee  ./coffee
 ### To do
 
 * Game-over and restart
-* Better food generation algorithm (nothing near center or main snake head)
 * Shares
 * Touch events
 * Avoid hacky turn back (pressing two arrows almost instantaneously)
