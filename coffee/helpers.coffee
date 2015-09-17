@@ -2,21 +2,7 @@
 # ignacio.nh@gmail.com
 # Buenos Aires, Argentina
 
-_playing = false
-playing = -> _playing
-setPlaying = (boolean) -> _playing = boolean
-
-gridWidth = 100
-gridHeight = 50
-
-atFrameRate = (frameRate) ->
-  {
-    do: (action) ->
-      setInterval(action, 1000/frameRate)
-  }
-
 _currentColor = -1
-
 nextColor = ->
   colors = [
     '#bc2424',
@@ -39,7 +25,7 @@ distance = (onePosition, anotherPosition) ->
   yDiff = onePosition.y - anotherPosition.y
   Math.sqrt(xDiff*xDiff + yDiff*yDiff)
 
-randomPosition = ->
+randomPosition = (gridWidth, gridHeight)->
   {
     x: equiprobable(0, gridWidth),
     y: equiprobable(0, gridHeight)
@@ -54,56 +40,3 @@ intersect = (oneList, anotherList) ->
       if element.x == anotherElement.x and element.y == anotherElement.y
         return true
   false
-
-collision = (oneSnake, anotherSnake) ->
-  intersect(oneSnake.occupiedSpace(), anotherSnake.occupiedSpace())
-
-drawingCanvas = {
-  $el: null
-  el: null
-  ctx: null
-
-  init: ->
-    @$el = $('canvas')
-    @el = @$el[0]
-    @el.width = @$el.width()
-    @el.height = @$el.height()
-    minGridSize = 50
-    if @el.height < @el.width
-      gridHeight = minGridSize
-      gridWidth = Math.round(minGridSize*@el.width/@el.height)
-    else
-      gridHeight = Math.round(minGridSize*@el.height/@el.width)
-      gridWidth = minGridSize
-
-    @ctx = @el.getContext('2d')
-
-  clear: ->
-    @ctx.clearRect(0, 0, @el.width, @el.height)
-
-  drawSquare: (x, y, color) ->
-    @ctx.fillStyle = color
-    @ctx.fillRect(
-      x*@el.width/gridWidth,
-      y*@el.height/gridHeight,
-      @el.width/gridWidth,
-      @el.height/gridHeight
-    )
-
-}
-
-bindEvents = (snake) ->
-  changeDirection = (e) ->
-    if playing()
-      snake.keyPressed(e.keyCode)
-    else if e.keyCode == 37 or e.keyCode == 38 or e.keyCode == 39 or e.keyCode == 40
-      hideGameOver()
-      setPlaying(true)
-
-  $(window).on('keydown', changeDirection)
-
-showGameOver = ->
-  $('#game-over').show()
-
-hideGameOver = ->
-  $('#game-over').hide()

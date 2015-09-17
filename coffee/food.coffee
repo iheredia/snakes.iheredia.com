@@ -5,13 +5,22 @@
 class Food
 
   constructor: ->
-    @position = randomPosition()
     @color = nextColor()
+    @drawingCanvas = new DrawingCanvas($('canvas'))
+    @position = randomPosition(@drawingCanvas.gridWidth, @drawingCanvas.gridHeight)
 
   render: ->
-    drawingCanvas.drawSquare(@position.x, @position.y, @color)
+    @position.x = @drawingCanvas.normalizeWidth(@position.x)
+    @position.y = @drawingCanvas.normalizeHeight(@position.y)
+    @drawingCanvas.drawSquare(@position.x, @position.y, @color)
 
   regenerateDependingOn: (snakePosition) ->
-    while distance(@position, {x:gridWidth/2, y:gridHeight/2}) < 10 or distance(@position, snakePosition) < 10
-      @position = randomPosition()
+    while @distanceToCenter() < 10 or @distanceToSnake(snakePosition) < 10
+      @position = randomPosition(@drawingCanvas.gridWidth, @drawingCanvas.gridHeight)
     @color = nextColor()
+
+  distanceToCenter: ->
+    distance(@position, {x:@drawingCanvas.gridWidth/2, y:@drawingCanvas.gridHeight/2})
+
+  distanceToSnake: (snakePosition) ->
+    distance(@position, snakePosition)

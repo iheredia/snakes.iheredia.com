@@ -1,42 +1,36 @@
-# Ignacio Heredia
-# ignacio.nh@gmail.com
-# Buenos Aires, Argentina
-
 class MainSnake
   length: 6
 
   constructor: ->
-    @position = { x: Math.round(gridWidth/2), y: Math.round(gridHeight/2) }
-    @history = [ { x: @position.x, y: @position.y } ]
     @color = '#ededed'
     @direction = 'right'
+    @drawingCanvas = new DrawingCanvas($('canvas'))
+    @position = {
+      x: Math.round(@drawingCanvas.gridWidth/2),
+      y: Math.round(@drawingCanvas.gridHeight/2)
+    }
+    @history = [ { x: @position.x, y: @position.y } ]
 
   move: ->
     if @direction == 'right'
      @position.x += 1
-     if @position.x >= gridWidth
-       @position.x = 0
     else if @direction == 'left'
       @position.x -= 1
-      if @position.x < 0
-        @position.x = gridWidth - 1
     else if @direction == 'up'
       @position.y -= 1
-      if @position.y < 0
-        @position.y = gridHeight - 1
     else
       @position.y += 1
-      if @position.y >= gridHeight
-        @position.y = 0
+    @position.x = @drawingCanvas.normalizeWidth(@position.x)
+    @position.y = @drawingCanvas.normalizeHeight(@position.y)
 
     @history.push { x: @position.x, y: @position.y }
 
   render: ->
     for i in [1..6]
       if @history.length-i > -1
-        drawingCanvas.drawSquare(@history[@history.length-i].x, @history[@history.length-i].y, @color)
+        @drawingCanvas.drawSquare(@history[@history.length-i].x, @history[@history.length-i].y, @color)
       else
-        drawingCanvas.drawSquare(@history[0].x + @history.length-i, @history[0].y, @color)
+        @drawingCanvas.drawSquare(@history[0].x + @history.length-i, @history[0].y, @color)
 
   occupiedSpace: ->
     @history.slice(@history.length-6, @history.length)
@@ -58,6 +52,7 @@ class MirrorSnake
     @color = @params.color
     @originalSnake = @params.of
     @offset = 0
+    @drawingCanvas = new DrawingCanvas($('canvas'))
 
   move: ->
     @offset += 1
@@ -65,7 +60,7 @@ class MirrorSnake
   render: ->
     for i in [0...@length]
       position = @originalSnake.history[@offset+i]
-      drawingCanvas.drawSquare(position.x, position.y, @color)
+      @drawingCanvas.drawSquare(position.x, position.y, @color)
 
   occupiedSpace: ->
     @originalSnake.history.slice(@offset, @offset+@length)
