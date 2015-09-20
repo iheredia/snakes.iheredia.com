@@ -45,6 +45,13 @@ class MainSnake
     else if keyCode == 40 and @direction != 'up'
       @direction = 'down'
 
+  isEating: (anotherSnake) ->
+    anotherSnakeBody = anotherSnake.occupiedSpace()
+    for position in anotherSnakeBody
+      if @position.x == position.x and @position.y == position.y
+        return true
+    false
+
 class MirrorSnake
   length: 6
 
@@ -64,3 +71,11 @@ class MirrorSnake
 
   occupiedSpace: ->
     @originalSnake.history.slice(@offset, @offset+@length)
+
+  isEating: (anotherSnake) ->
+    anotherSnakeBody = anotherSnake.occupiedSpace()
+    [..., myPosition] = @occupiedSpace()
+    for position in anotherSnakeBody
+      if myPosition.x == position.x and myPosition.y == position.y
+        return true
+    false
