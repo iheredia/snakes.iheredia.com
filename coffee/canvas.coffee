@@ -17,7 +17,6 @@ class DrawingCanvas
     else
       @gridHeight = Math.round(@minGridSize*@el.height/@el.width)
       @gridWidth = @minGridSize
-    console.log(@el.width, @el.height)
 
   clear: ->
     @ctx.clearRect(0, 0, @el.width, @el.height)
