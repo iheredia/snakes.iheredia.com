@@ -24,3 +24,6 @@ class Food
 
   distanceToSnake: (snakePosition) ->
     distance(@position, snakePosition)
+
+  occupiedSpace: ->
+    [@position]

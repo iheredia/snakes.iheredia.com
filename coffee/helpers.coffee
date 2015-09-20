@@ -31,9 +31,6 @@ randomPosition = (gridWidth, gridHeight)->
     y: equiprobable(0, gridHeight)
   }
 
-areAtSamePlace = (oneThing, otherThing) ->
-  oneThing.position.x == otherThing.position.x && oneThing.position.y == otherThing.position.y
-
 intersect = (oneList, anotherList) ->
   for element in oneList
     for anotherElement in anotherList
