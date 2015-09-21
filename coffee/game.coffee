@@ -43,10 +43,10 @@ class Game
     if @mainSnake.status == 'alive'
       @moveSnakes()
       @checkFood()
-      @renderAll()
       @lookForCollisions()
-      @removeDying()
-    @mainSnake.render()
+      @collectDying()
+      @removeDead()
+    @renderAll()
 
   moveSnakes: ->
     @mainSnake.move()
@@ -65,16 +65,17 @@ class Game
       mirrorSnake.render()
     for dyingSnake in @dyingSnakes
       dyingSnake.render()
-    @food.render()
+    @food.render() if @mainSnake.status == 'alive'
+    @mainSnake.render()
 
   lookForCollisions: ->
     allSnakes = [@mainSnake].concat(@mirrorSnakes)
     for firstSnake in allSnakes
       for secondSnake in allSnakes
         if firstSnake != secondSnake and firstSnake.isEating(secondSnake)
-          secondSnake.status = 'dying'
+          secondSnake.startDying()
 
-  removeDying: ->
+  collectDying: ->
     aliveSnakes = []
     for mirrorSnake in @mirrorSnakes
       if mirrorSnake.status == 'dying'
@@ -82,6 +83,13 @@ class Game
       else
         aliveSnakes.push(mirrorSnake)
     @mirrorSnakes = aliveSnakes
+
+  removeDead: ->
+    filteredDyingSnakes = []
+    for snake in @dyingSnakes
+      if snake.status == 'dying'
+        filteredDyingSnakes.push(snake)
+    @dyingSnakes = filteredDyingSnakes
 
   showGameOver: ->
     $('#game-over').show()

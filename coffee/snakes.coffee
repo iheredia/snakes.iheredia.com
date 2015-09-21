@@ -1,7 +1,24 @@
-class MainSnake
+class Snake
   length: 6
 
+  startDying: ->
+    @status = 'dying'
+    @swapColor = @color
+    @color = 'rgba(0,0,0,0)'
+    @blinkCounter = 0
+    @blinkInterval = setInterval(=>
+      @blinkCounter += 1
+      [@swapColor, @color] = [@color, @swapColor]
+      console.log @color
+      if @blinkCounter > 8
+        clearInterval(@blinkInterval)
+        @status = 'dead'
+    , 250)
+
+class MainSnake extends Snake
+
   constructor: ->
+    @status = 'dead'
     @color = '#ededed'
     @direction = 'right'
     @drawingCanvas = new DrawingCanvas($('canvas'))
@@ -52,8 +69,7 @@ class MainSnake
         return true
     false
 
-class MirrorSnake
-  length: 6
+class MirrorSnake extends Snake
 
   constructor: (@params)->
     @color = @params.color
