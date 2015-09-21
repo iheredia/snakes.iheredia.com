@@ -402,18 +402,6 @@
       return this.dyingSnakes = filteredDyingSnakes;
     };
 
-    Game.prototype.showGameOver = function() {
-      return $('#game-over').show();
-    };
-
-    Game.prototype.hideGameOver = function() {
-      return $('#game-over').hide();
-    };
-
-    Game.prototype.collision = function(oneSnake, anotherSnake) {
-      return intersect(oneSnake.occupiedSpace(), anotherSnake.occupiedSpace());
-    };
-
     return Game;
 
   })();

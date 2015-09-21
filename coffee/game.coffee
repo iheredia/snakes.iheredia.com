@@ -90,12 +90,3 @@ class Game
       if snake.status == 'dying'
         filteredDyingSnakes.push(snake)
     @dyingSnakes = filteredDyingSnakes
-
-  showGameOver: ->
-    $('#game-over').show()
-
-  hideGameOver: ->
-    $('#game-over').hide()
-
-  collision: (oneSnake, anotherSnake) ->
-    intersect(oneSnake.occupiedSpace(), anotherSnake.occupiedSpace())
