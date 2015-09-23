@@ -259,7 +259,7 @@
       this.mainSnake = new MainSnake;
       this.mirrorSnakes = [];
       this.dyingSnakes = [];
-      this.food = new Food;
+      this.foods = [new Food];
       return this.score = 0;
     };
 
@@ -322,18 +322,43 @@
     };
 
     Game.prototype.checkFood = function() {
-      if (this.mainSnake.isEating(this.food)) {
-        this.mirrorSnakes.push(new MirrorSnake({
-          of: this.mainSnake,
-          color: this.food.color
-        }));
-        this.food.regenerateDependingOn(this.mainSnake.position);
-        return this.addScore();
+      var food, j, len, ref, results, snake;
+      ref = this.foods;
+      results = [];
+      for (j = 0, len = ref.length; j < len; j++) {
+        food = ref[j];
+        if (this.mainSnake.isEating(food)) {
+          this.addSnakeFrom(food);
+          this.addScore();
+        }
+        results.push((function() {
+          var k, len1, ref1, results1;
+          ref1 = this.mirrorSnakes;
+          results1 = [];
+          for (k = 0, len1 = ref1.length; k < len1; k++) {
+            snake = ref1[k];
+            if (snake.isEating(food)) {
+              results1.push(this.addSnakeFrom(food));
+            } else {
+              results1.push(void 0);
+            }
+          }
+          return results1;
+        }).call(this));
       }
+      return results;
+    };
+
+    Game.prototype.addSnakeFrom = function(food) {
+      this.mirrorSnakes.push(new MirrorSnake({
+        of: this.mainSnake,
+        color: food.color
+      }));
+      return food.regenerateDependingOn(this.mainSnake.position);
     };
 
     Game.prototype.renderAll = function() {
-      var dyingSnake, j, k, len, len1, mirrorSnake, ref, ref1;
+      var dyingSnake, food, j, k, l, len, len1, len2, mirrorSnake, ref, ref1, ref2;
       this.drawingCanvas.clear();
       ref = this.mirrorSnakes;
       for (j = 0, len = ref.length; j < len; j++) {
@@ -346,7 +371,11 @@
         dyingSnake.render();
       }
       if (this.mainSnake.status === 'alive') {
-        this.food.render();
+        ref2 = this.foods;
+        for (l = 0, len2 = ref2.length; l < len2; l++) {
+          food = ref2[l];
+          food.render();
+        }
       }
       return this.mainSnake.render();
     };

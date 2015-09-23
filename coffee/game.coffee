@@ -10,7 +10,7 @@ class Game
     @mainSnake = new MainSnake
     @mirrorSnakes = []
     @dyingSnakes = []
-    @food = new Food
+    @foods = [new Food]
     @score = 0
 
   initCanvas: ->
@@ -54,10 +54,17 @@ class Game
       mirrorSnake.move()
 
   checkFood: ->
-    if @mainSnake.isEating(@food)
-      @mirrorSnakes.push new MirrorSnake(of: @mainSnake, color: @food.color)
-      @food.regenerateDependingOn(@mainSnake.position)
-      @addScore()
+    for food in @foods
+      if @mainSnake.isEating(food)
+        @addSnakeFrom(food)
+        @addScore()
+      for snake in @mirrorSnakes
+        if snake.isEating(food)
+          @addSnakeFrom(food)
+
+  addSnakeFrom: (food)->
+    @mirrorSnakes.push new MirrorSnake(of: @mainSnake, color: food.color)
+    food.regenerateDependingOn(@mainSnake.position)
 
   renderAll: ->
     @drawingCanvas.clear()
@@ -65,7 +72,9 @@ class Game
       mirrorSnake.render()
     for dyingSnake in @dyingSnakes
       dyingSnake.render()
-    @food.render() if @mainSnake.status == 'alive'
+    if @mainSnake.status == 'alive'
+      for food in @foods
+        food.render()
     @mainSnake.render()
 
   lookForCollisions: ->
