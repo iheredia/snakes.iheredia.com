@@ -7,8 +7,8 @@ class DrawingCanvas
     @ctx = @el.getContext('2d')
 
   setSizes: =>
-    @el.width = @$el.width()
-    @el.height = @$el.height()
+    @el.width = @$el.width() if @el.width != @$el.width()
+    @el.height = @$el.height() if @el.height != @$el.height()
     @minGridSize = 50
 
     if @el.height < @el.width

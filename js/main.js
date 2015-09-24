@@ -466,8 +466,12 @@
     }
 
     DrawingCanvas.prototype.setSizes = function() {
-      this.el.width = this.$el.width();
-      this.el.height = this.$el.height();
+      if (this.el.width !== this.$el.width()) {
+        this.el.width = this.$el.width();
+      }
+      if (this.el.height !== this.$el.height()) {
+        this.el.height = this.$el.height();
+      }
       this.minGridSize = 50;
       if (this.el.height < this.el.width) {
         this.gridHeight = this.minGridSize;
