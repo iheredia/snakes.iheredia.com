@@ -15,8 +15,9 @@ class Food
     @drawingCanvas.drawSquare(@position.x, @position.y, @color)
 
   regenerateDependingOn: (snakePosition) ->
-    while @distanceToCenter() < 10 or @distanceToSnake(snakePosition) < 10
+    loop
       @position = randomPosition(@drawingCanvas.gridWidth, @drawingCanvas.gridHeight)
+      break if @distanceToCenter() > 10 and @distanceToSnake(snakePosition) > 10
     @color = nextColor()
 
   distanceToCenter: ->

@@ -5,6 +5,7 @@ class Game
     @initCanvas()
     @bindEvents()
     @startMainLoop()
+    @startFoodLoop()
 
   initGame: ->
     @mainSnake = new MainSnake
@@ -31,6 +32,11 @@ class Game
     @frameRate = 20
     setInterval(@mainLoop, 1000/@frameRate)
 
+  startFoodLoop: ->
+    @foodRegenerationTime = 15
+    @foodCountDown = @foodRegenerationTime
+    setInterval(@foodLoop, 1000)
+
   addScore: ->
     @score += 1
     $('#score-number').text(@score)
@@ -47,6 +53,13 @@ class Game
       @collectDying()
       @removeDead()
     @renderAll()
+
+  foodLoop: =>
+    if @foodCountDown > 0
+      @foodCountDown -= 1
+    else
+      @foodCountDown = @foodRegenerationTime
+      @foods.push new Food
 
   moveSnakes: ->
     @mainSnake.move()

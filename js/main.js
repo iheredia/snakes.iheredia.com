@@ -221,8 +221,11 @@
     };
 
     Food.prototype.regenerateDependingOn = function(snakePosition) {
-      while (this.distanceToCenter() < 10 || this.distanceToSnake(snakePosition) < 10) {
+      while (true) {
         this.position = randomPosition(this.drawingCanvas.gridWidth, this.drawingCanvas.gridHeight);
+        if (this.distanceToCenter() > 10 && this.distanceToSnake(snakePosition) > 10) {
+          break;
+        }
       }
       return this.color = nextColor();
     };
@@ -248,11 +251,13 @@
 
   Game = (function() {
     function Game() {
+      this.foodLoop = bind(this.foodLoop, this);
       this.mainLoop = bind(this.mainLoop, this);
       this.initGame();
       this.initCanvas();
       this.bindEvents();
       this.startMainLoop();
+      this.startFoodLoop();
     }
 
     Game.prototype.initGame = function() {
@@ -288,6 +293,12 @@
       return setInterval(this.mainLoop, 1000 / this.frameRate);
     };
 
+    Game.prototype.startFoodLoop = function() {
+      this.foodRegenerationTime = 15;
+      this.foodCountDown = this.foodRegenerationTime;
+      return setInterval(this.foodLoop, 1000);
+    };
+
     Game.prototype.addScore = function() {
       this.score += 1;
       return $('#score-number').text(this.score);
@@ -307,6 +318,15 @@
         this.removeDead();
       }
       return this.renderAll();
+    };
+
+    Game.prototype.foodLoop = function() {
+      if (this.foodCountDown > 0) {
+        return this.foodCountDown -= 1;
+      } else {
+        this.foodCountDown = this.foodRegenerationTime;
+        return this.foods.push(new Food);
+      }
     };
 
     Game.prototype.moveSnakes = function() {
