@@ -11,3 +11,4 @@ The only third party libraries being used are FontAwesome and jQuery, for icons 
 * Levels
 * Touch events
 * Social sharing
+* Portals?

@@ -9,7 +9,6 @@ class Snake
     @blinkInterval = setInterval(=>
       @blinkCounter += 1
       [@swapColor, @color] = [@color, @swapColor]
-      console.log @color
       if @blinkCounter > 8
         clearInterval(@blinkInterval)
         @status = 'dead'
@@ -76,17 +75,24 @@ class MirrorSnake extends Snake
     @originalSnake = @params.of
     @offset = 0
     @drawingCanvas = new DrawingCanvas($('canvas'))
+    @shiftPoint = shiftPositionFarFrom(@originalSnake)
 
   move: ->
     @offset += 1
 
   render: ->
-    for i in [0...@length]
-      position = @originalSnake.history[@offset+i]
+    for position in @occupiedSpace()
       @drawingCanvas.drawSquare(position.x, position.y, @color)
 
   occupiedSpace: ->
-    @originalSnake.history.slice(@offset, @offset+@length)
+    originalPositions = @originalSnake.history.slice(@offset, @offset+@length)
+    shiftedPositions = []
+    for position in originalPositions
+      shiftedPositions.push({
+        x: @drawingCanvas.normalizeWidth(position.x + @shiftPoint.x)
+        y: @drawingCanvas.normalizeHeight(position.y + @shiftPoint.y)
+      })
+    shiftedPositions
 
   isEating: (anotherSnake) ->
     anotherSnakeBody = anotherSnake.occupiedSpace()

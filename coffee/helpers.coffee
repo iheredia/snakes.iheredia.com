@@ -37,3 +37,11 @@ intersect = (oneList, anotherList) ->
       if element.x == anotherElement.x and element.y == anotherElement.y
         return true
   false
+
+shiftPositionFarFrom = (snake) ->
+  shiftPosition = snake.position
+  while distance(snake.position, shiftPosition) < 20
+    shiftPosition = randomPosition(snake.drawingCanvas.gridWidth, snake.drawingCanvas.gridHeight)
+    shiftPosition.x = snake.drawingCanvas.normalizeWidth(shiftPosition.x + snake.history[0].x)
+    shiftPosition.y = snake.drawingCanvas.normalizeHeight(shiftPosition.y + snake.history[0].y)
+  shiftPosition
