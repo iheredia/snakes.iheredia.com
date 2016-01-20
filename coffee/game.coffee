@@ -27,6 +27,26 @@ class Game
           @mainSnake.status = 'alive'
         @mainSnake.keyPressed(e.keyCode)
     )
+    $('canvas').on('tap', =>
+      if @mainSnake.status == 'dead'
+        @initGame()
+        @mainSnake.status = 'alive'
+    ).swipe(
+      swipeLeft: (e) =>
+        e.preventDefault()
+        @mainSnake.keyPressed(37)
+      swipeUp: (e) =>
+        e.preventDefault()
+        @mainSnake.keyPressed(38)
+      swipeRight: (e) =>
+        e.preventDefault()
+        @mainSnake.keyPressed(39)
+      swipeDown: (e) =>
+        e.preventDefault()
+        @mainSnake.keyPressed(40)
+      threshold: 20
+    )
+
 
   startMainLoop: ->
     @frameRate = 20

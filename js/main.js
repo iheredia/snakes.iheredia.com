@@ -133,7 +133,7 @@
     };
 
     Game.prototype.bindEvents = function() {
-      return $(window).on('keydown', (function(_this) {
+      $(window).on('keydown', (function(_this) {
         return function(e) {
           if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
             if (_this.mainSnake.status === 'dead') {
@@ -144,6 +144,40 @@
           }
         };
       })(this));
+      return $('canvas').on('tap', (function(_this) {
+        return function() {
+          if (_this.mainSnake.status === 'dead') {
+            _this.initGame();
+            return _this.mainSnake.status = 'alive';
+          }
+        };
+      })(this)).swipe({
+        swipeLeft: (function(_this) {
+          return function(e) {
+            e.preventDefault();
+            return _this.mainSnake.keyPressed(37);
+          };
+        })(this),
+        swipeUp: (function(_this) {
+          return function(e) {
+            e.preventDefault();
+            return _this.mainSnake.keyPressed(38);
+          };
+        })(this),
+        swipeRight: (function(_this) {
+          return function(e) {
+            e.preventDefault();
+            return _this.mainSnake.keyPressed(39);
+          };
+        })(this),
+        swipeDown: (function(_this) {
+          return function(e) {
+            e.preventDefault();
+            return _this.mainSnake.keyPressed(40);
+          };
+        })(this),
+        threshold: 20
+      });
     };
 
     Game.prototype.startMainLoop = function() {
